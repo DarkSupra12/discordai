@@ -3,36 +3,29 @@ import sys
 import discord
 import asyncio
 import json
-import random
+import random, time, threading
 from discord.ext.tasks import loop
 bot = discord.Client(description="xddd", self_bot=True)
-
-token = "token"
-
-illegal_character = [':','<','>','_',"'","-"]
-def st(cb):
-  try:
-    cb.browser.get(cb.url)
-  except:
-    cb.browser.close()
-    sys.exit()
-  try:
-    cb.get_form()
-  except:
-    sys.exit()
-@bot.event
-async def on_ready():
-        print("Logged in")
 gs={"a":"text"}
 writer=""
 olw=""
+token = "ODA4Nzk0ODQ2NjAwMzY0MDM0.YCLv-A.eH_ZKb2MvEzyEOgeL98o1CwISQw"
+print("Creating handler...")
+gs["rs"]=cleverbotfree.cbfree.Cleverbot()
+gs["rs"].browser.get(gs["rs"].url)
+gs["rs"].get_form()
+print("Loading discord api...")
+illegal_character = [':','<','>','_',"'","-"]
+@bot.event
+async def on_ready():
+        print("Logged in")
 @bot.event
 async def on_message(message):
   print("called")
   if message.author == bot.user:
     return
   global illegal_character, gs, writer
-  if bot.user.mentioned_in(message):
+  if message.guild:
     if not message.guild in gs:
       gs[message.guild]=gs.pop("rs")
     userInput = (message.content)
@@ -51,7 +44,7 @@ async def on_message(message):
     await message.channel.send(b)
     print(str(message.guild)+":"+message.content)
     print("bot:" + b)
-    writer=writer+"\n"+(str(message.guild)+":"+message.content)
+    writer=writer+"\n"+(str(message.guild)+"("+str(message.author)+"):"+message.content)
     writer=writer+"\n"+("bot:" + b)
   elif not message.guild:
     if not message.author in gs:
@@ -74,23 +67,18 @@ async def on_message(message):
     print("bot:" + b)
     writer=writer+"\n"+(str(message.author)+":"+message.content)
     writer=writer+"\n"+("bot:" + b)
-@loop(seconds=5)
-async def ns():
+def ns():
   global gs
-  if not "rs" in gs:
-    print("making new...")
-    gs["rs"]=cleverbotfree.cbfree.Cleverbot()
-    try:
+  while True:
+    if not "rs" in gs:
+      print("making new...")
+      gs["rs"]=cleverbotfree.cbfree.Cleverbot()
       gs["rs"].browser.get(gs["rs"].url)
-    except:
-      gs["rs"].browser.close()
-      sys.exit()
-    try:
       gs["rs"].get_form()
-    except:
-      sys.exit()
-    print("made new")
-ns.start()
+      print("made new")
+    time.sleep(2)
+nss=threading.Thread(target=ns)
+nss.start()
 @loop(seconds=2)
 async def wri():
   global olw,writer
