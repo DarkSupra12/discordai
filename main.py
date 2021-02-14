@@ -9,7 +9,7 @@ bot = discord.Client(description="xddd", self_bot=True)
 gs={"a":"text"}
 writer=""
 olw=""
-token = "ODA4Nzk0ODQ2NjAwMzY0MDM0.YCLv-A.eH_ZKb2MvEzyEOgeL98o1CwISQw"
+token = ""
 print("Creating handler...")
 gs["rs"]=cleverbotfree.cbfree.Cleverbot()
 gs["rs"].browser.get(gs["rs"].url)
